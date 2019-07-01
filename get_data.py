@@ -69,7 +69,7 @@ def get_data():
 
 
 # function that runs every hour
-def do_every_hour(minutes):
+def do_every_minutes(minutes):
     start_time = time.time()
     while True:
         print('adding... ', datetime.datetime.now())
@@ -79,8 +79,9 @@ def do_every_hour(minutes):
 
 
 if __name__ == '__main__':
+    param = int(sys.argv[1])
     # if parameter is int
     try:
-        do_every_hour(int(sys.argv[1]))
+        do_every_minutes(param)
     except ValueError:
         print('wrong parameter')
