@@ -5,6 +5,7 @@ import datetime
 from bs4 import BeautifulSoup
 import csv
 import time
+import sys
 
 
 def get_data():
@@ -36,7 +37,8 @@ def get_data():
     for price_total in soup.find_all('td', class_='market-cap'):
         price_total = price_total.text
         price_total = price_total.replace('\n', '')
-        price_total = price_total.replace(',', ' ')
+        price_total = price_total.replace(',', '')
+        price_total = price_total.replace('$', '')
         data_price_total.append(price_total)
 
     # creates final list of all data
@@ -67,13 +69,18 @@ def get_data():
 
 
 # function that runs every hour
-def do_every_hour():
+def do_every_hour(minutes):
     start_time = time.time()
     while True:
         print('adding... ', datetime.datetime.now())
         get_data()
         print('added ', datetime.datetime.now())
-        time.sleep(3600.0 - ((time.time() - start_time) % 3600.0))
+        time.sleep((float(minutes)*60) - ((time.time() - start_time) % (float(minutes)*60)))
 
 
-do_every_hour()
+if __name__ == '__main__':
+    # if parameter is int
+    try:
+        do_every_hour(int(sys.argv[1]))
+    except ValueError:
+        print('wrong parameter')
